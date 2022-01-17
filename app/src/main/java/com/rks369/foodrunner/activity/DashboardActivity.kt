@@ -1,6 +1,9 @@
 
 package com.rks369.foodrunner.activity
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.FrameLayout
@@ -21,6 +24,8 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var frameLayout: FrameLayout
     private lateinit var navigationView: NavigationView
     private var previousMenuItem:MenuItem?=null
+
+    lateinit var sharedpreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,12 +91,13 @@ class DashboardActivity : AppCompatActivity() {
 
                 }
                 R.id.logOut ->{
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.frameLayout,
-                        LogoutFragment()
-                    ).commit()
-                            drawerLayout.closeDrawers()
-                    supportActionBar?.title="LogOut"
+                    sharedpreferences =
+                        this.getSharedPreferences("FoodApp", Context.MODE_PRIVATE)
+                    sharedpreferences.edit()
+                        .putBoolean("isLoggedIn", false)
+                        .apply()
+                        startActivity(Intent(this,LoginActivity::class.java))
+                        finish()
                 }
 
 
